@@ -1,0 +1,60 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "model": "zai-coding-plan/glm-4.7",
+  "autoupdate": true,
+  "default_agent": "raiden",
+  "mcp": {
+    "zai-mcp-server": {
+      "type": "local",
+      "command": ["npx","-y","@z_ai/mcp-server"],
+      "environment": {
+        "Z_AI_API_KEY": "YOUR_Z_AI_API_KEY",
+        "Z_AI_MODE": "ZAI"
+      }
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_CONTEXT7_API_KEY"
+      },
+      "enabled": true
+    },
+    "brave-search": {
+      "type": "local",
+      "command": ["npx","-y","@modelcontextprotocol/server-brave-search"],
+      "environment": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY"
+      },
+      "enabled": true
+    }
+  },
+  "agent": {
+    "plan": {
+      "disable": true
+    },
+    "build": {
+      "disable": true
+    },
+    "general": {
+      "disable": true
+    },
+    "explore": {
+      "disable": true
+    }
+  },
+  "provider": {
+    "alibaba": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Aliyun Model Studio",
+      "options": {
+        "baseURL": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+        "apiKey": "YOUR_ALIBABA_API_KEY",
+        "headers": {
+          "Authorization": "Bearer YOUR_ALIBABA_API_KEY"
+        }
+      }
+    }
+  }
+}
