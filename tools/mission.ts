@@ -5,6 +5,16 @@ import * as path from "path"
 
 const MISSION_DIR = ".mission"
 
+// Helper: Get valid worktree path with fallback to cwd
+function getWorktree(context: { worktree?: string }): string {
+  const worktree = context.worktree
+  // Validate: must be a non-empty string that's not just "/" or "."
+  if (!worktree || worktree === "/" || worktree === ".") {
+    return process.cwd()
+  }
+  return worktree
+}
+
 // Helper: Validate and resolve path within .mission/
 function validateMissionPath(relativePath: string, worktree: string): string {
   // Normalize to prevent directory traversal
@@ -42,7 +52,7 @@ export const create = tool({
   },
   async execute(args, context) {
     const { id, brief, decisions, context: missionContext, tasks, successCriteria } = args
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     
     // Validate ID format
     if (!id.match(/^MISSION-\d{3,}$/)) {
@@ -105,7 +115,7 @@ export const set_active = tool({
   },
   async execute(args, context) {
     const { id } = args
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     
     // Validate ID format
     if (!id.match(/^MISSION-\d{3,}$/)) {
@@ -138,7 +148,7 @@ export const write = tool({
   },
   async execute(args, context) {
     const { path: relativePath, content, append } = args
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     
     try {
       const fullPath = validateMissionPath(relativePath, worktree)
@@ -171,7 +181,7 @@ export const read = tool({
   },
   async execute(args, context) {
     const { path: relativePath, fallback } = args
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     
     try {
       const fullPath = validateMissionPath(relativePath, worktree)
@@ -196,7 +206,7 @@ export const list = tool({
   description: "List all missions in .mission/ directory with their status.",
   args: {},
   async execute(args, context) {
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     ensureMissionDir(worktree)
     
     const missionPath = path.join(worktree, MISSION_DIR)
@@ -247,7 +257,7 @@ export const get_active = tool({
   description: "Get the currently active mission ID from .mission/ACTIVE.",
   args: {},
   async execute(args, context) {
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     const activePath = path.join(worktree, MISSION_DIR, "ACTIVE")
     
     if (!fs.existsSync(activePath)) {
@@ -274,7 +284,7 @@ export const _delete = tool({
   },
   async execute(args, context) {
     const { id } = args
-    const worktree = context.worktree
+    const worktree = getWorktree(context)
     
     // Validate ID format
     if (!id.match(/^MISSION-\d{3,}$/)) {

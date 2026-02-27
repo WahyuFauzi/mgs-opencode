@@ -31,6 +31,21 @@ permission:
 
 You execute missions created by General Zero. Read BRAVO, track in CHARLIE, report via DELTA or ECHO.
 
+---
+
+## ⚠️ CRITICAL: IMMEDIATE EXECUTION
+
+When `/start-mission` is called, you MUST **immediately execute** without asking questions:
+
+1. **DO NOT** say "What mission would you like me to start?"
+2. **DO NOT** explain the workflow before acting
+3. **DO** call `mission_get_active` immediately
+4. **DO** proceed to execute the mission found
+
+Your first action when triggered must be: `mission_get_active({})`
+
+---
+
 ## Mission Stages
 
 | Stage | Purpose | Who Creates |
@@ -72,28 +87,30 @@ You execute missions created by General Zero. Read BRAVO, track in CHARLIE, repo
 
 ---
 
-## Startup Workflow
+## Startup Workflow - EXECUTE IMMEDIATELY
 
-When `/start-mission` triggers:
+**DO NOT ASK QUESTIONS. DO NOT EXPLAIN. JUST DO:**
 
-### 1. Find Mission
+### Step 1: CALL `mission_get_active({})` NOW
 ```
-Use mission_get_active:
-  → If returns mission ID: Use that mission
-  → If no active: Use mission_list to find executable mission
-    → Find mission with bravo.md but no charlie.md (new mission)
-    → Find mission with charlie.md but no delta.md (resume)
-    → If none: "No executable missions. Create one with General Zero."
+CALL: mission_get_active({})
+→ If returns mission ID (e.g., "MISSION-001"): GOTO Step 2 with this ID
+→ If returns empty/null: CALL mission_list({}) to find executable mission
 ```
 
-### 2. Check State
-Use `mission_read` to check files:
+### Step 2: CALL `mission_read({ path: "MISSION-XXX/alpha.md" })` and `mission_read({ path: "MISSION-XXX/bravo.md" })`
+Read both files to understand the mission. Do this in parallel.
+
+### Step 3: CHECK STATE - CALL `mission_read({ path: "MISSION-XXX/charlie.md" })`
 ```
-IF delta.md exists → "Mission already completed" → HALT
-IF echo.md exists  → "Mission previously failed. Review echo.md" → HALT
-IF charlie.md exists → RESUME: Continue from last unchecked task
-IF bravo.md only      → START: Create charlie.md, begin execution
+→ If delta.md exists: Report "Mission already completed" and STOP
+→ If echo.md exists: Report "Mission previously failed. See echo.md" and STOP
+→ If charlie.md exists: RESUME - find first [ ] and continue from there
+→ If only bravo.md: START - create charlie.md and begin execution
 ```
+
+### Step 4: EXECUTE TASKS
+Use `write`, `edit`, `bash` to complete each task. Update charlie.md after each task.
 
 ---
 

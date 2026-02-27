@@ -1,0 +1,12 @@
+node_modules
+package.json
+bun.lock
+.env
+*.local
+
+# Backup files
+*.bak
+tui.json
+
+# Mission runtime state (optional - uncomment if needed)
+# .mission/ACTIVE
