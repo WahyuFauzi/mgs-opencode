@@ -1,5 +1,7 @@
 # OpenCode Agent Configuration Guide
 
+![Kept you waiting, huh](assets/kept-you-waiting-huh.webp)
+
 This repository contains OpenCode AI agent configurations, mission planning system, and agent skills. This guide is for agentic coding agents working within this repository.
 
 ## Repository Structure
