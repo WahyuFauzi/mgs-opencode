@@ -27,7 +27,6 @@ The agents in this repository are named after characters from the **Metal Gear S
 | **ocelot** | Subagent | Quality Assurance | Code review, validation, issue detection |
 | **otacan** | Subagent | Intelligence | Research, documentation lookup, codebase reconnaissance |
 | **raiden** | Primary | Direct Execution | Fast task completion with confirmation |
-| **sigint** | Primary | Version Control | Git operations, commits, branch management |
 
 ### Character Backgrounds
 
@@ -97,19 +96,23 @@ Named after the cybernetically-enhanced ninja and protagonist of MGS2. Raiden re
 - Free read/search access without confirmation
 - Ideal for quick, single-purpose tasks
 
-#### sigint
-Named after Donald Anderson, DARPA director and communications expert. Sigint represents technical diagnostics and version control operations.
-
-**Agent Capabilities:**
-- Git operations specialist with safety-first approach
-- **Smart Commits**: Semantic commit messages with proper formatting
-- **Branch Management**: Create, switch, merge branches safely
-- **Status Reports**: Clear summary of staged/unstaged changes
-- **Safety Rules**: Never force push, hard reset, or delete unmerged branches without explicit confirmation
-- Commands: `/git-status`, `/git-commit`, `/git-branch`, `/git-log`
-- Integrates with Ocelot for post-review commits
 
 ---
+
+## Available Skills
+
+Skills are modular knowledge packages that agents can load when needed:
+
+| Skill | Description | Primary Users |
+|-------|-------------|---------------|
+| **git-best-practices** | Git workflow fundamentals with safety-first approach | Raiden, Big Boss |
+| **testing-specialist** | Comprehensive testing methodologies and quality assurance | Raiden, Big Boss |
+| **docker-best-practices** | Docker containerization and image optimization | All agents |
+| **security-best-practices** | Security guidelines and vulnerability patterns | Ocelot, Big Boss |
+| **code-graph-analysis** | CodeGraphContext MCP tools for code analysis | Otacon, General Zero |
+| **html-code-explanation** | Interactive HTML code explanations with templates | EVA |
+| **pdf-code-explanation** | Engaging PDF code explanations in informal style | EVA |
+| **mission-templates** | Mission stage templates for ALPHA, BRAVO, CHARLIE, DELTA, ECHO | General Zero, Big Boss |
 
 ### Agent Workflow
 
@@ -133,12 +136,9 @@ User Request
 │     Ocelot      │
 │  (Code Review)  │
 └────────┬────────┘
-         │ Creates review.md (PASS)
-         ▼
-┌─────────────────┐
-│     Sigint      │
-│ (Git Commit)    │
-└─────────────────┘
+          │ Creates review.md (PASS)
+          ▼
+     Git operations via skills
 ```
 
 **Alternative: Direct Execution**

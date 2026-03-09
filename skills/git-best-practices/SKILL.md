@@ -217,6 +217,61 @@ git checkout -b release/v1.0.0
 - **Ignore conflicts** - Don't just pick one side randomly
 - **Commit sensitive data** - Use .gitignore properly
 
+## Safety-First Git Operations
+
+### Safety Rules
+
+**NEVER Without Explicit Confirmation**
+- Force push (`git push --force`)
+- Hard reset (`git reset --hard`)
+- Delete branches that aren't fully merged
+- Amend public commits
+- Rebase shared branches
+
+**ALWAYS Before Actions**
+- Show current status (`git status`)
+- Display changes that will be affected (`git diff --staged`)
+- Warn about potential issues (uncommitted changes, conflicts)
+- Require explicit "yes" or "proceed" confirmation
+
+**Detect and Warn**
+- Uncommitted changes before branch switch
+- Unpushed commits before operations
+- Merge conflicts before merge attempts
+- Diverged history before push
+
+### Structured Workflow Patterns
+
+#### Creating a Commit
+```
+1. git status → Identify changes
+2. git diff → Show changes to user
+3. Generate commit message using Conventional Commits format
+4. Ask: "Commit these changes with message: [message]?"
+5. git add [files] → Stage
+6. git commit -m "[message]" → Commit
+7. Report: "Committed [hash]"
+```
+
+#### Creating a Branch
+```
+1. git status → Check for uncommitted changes
+2. If dirty: Warn user "You have uncommitted changes"
+3. Ask: "Create branch [name] from [current]?"
+4. git checkout -b [name] → Create and switch
+5. Report: "Created and switched to [name]"
+```
+
+#### Merging Branches
+```
+1. git status → Ensure clean working directory
+2. git log [branch] --oneline -5 → Show incoming commits
+3. Ask: "Merge [branch] into [current]?"
+4. git merge [branch] → Merge
+5. If conflicts: Report and HALT for manual resolution
+6. Report: "Merged [branch] successfully"
+```
+
 ## Useful Commands Reference
 
 ```bash

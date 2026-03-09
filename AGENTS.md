@@ -65,7 +65,6 @@ metadata:
 
 - **Agent files**: lowercase with hyphens (e.g., `general-zero.md`, `big-boss.md`)
 - **Command files**: lowercase with hyphens, prefixed with `/` (e.g., `/start-mission.md`)
-- **Skill directories**: lowercase with hyphens (e.g., `code-review/`)
 - **Skill files**: UPPERCASE `SKILL.md` exactly
 - **Mission IDs**: UPPERCASE with hyphens (e.g., `MISSION-001`)
 
