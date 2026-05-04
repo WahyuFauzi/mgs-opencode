@@ -1,7 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "opencode",
-  "model": "zai-coding-plan/glm-4.7",
   "autoupdate": true,
   "default_agent": "raiden",
   "mcp": {
@@ -9,29 +8,22 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "headers": {
-        "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
+        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
       },
       "enabled": true
     },
-    "brave-search": {
+    "MiniMax": {
       "type": "local",
-      "command": ["npx","-y","@modelcontextprotocol/server-brave-search"],
+      "command": ["uvx", "minimax-coding-plan-mcp", "-y"],
       "environment": {
-        "BRAVE_API_KEY": "{env:BRAVE_API_KEY}"
+        "MINIMAX_API_KEY": "${MINIMAX_API_KEY}",
+        "MINIMAX_API_HOST": "https://api.minimax.io"
       },
       "enabled": true
     },
     "codegraphcontext": {
       "type": "local",
       "command": ["cgc", "mcp", "start"],
-      "enabled": true
-    },
-    "memory": {
-      "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "environment": {
-        "MEMORY_FILE_PATH": "/home/yuyuid/.mcp-memory/memory.jsonl"
-      },
       "enabled": true
     }
   },
@@ -48,10 +40,165 @@
     "explore": {
       "disable": true
     },
+    "raiden": {
+      "description": "Direct task execution agent - ask before making changes",
+      "mode": "primary",
+      "model": "minimax-coding-plan/MiniMax-M2.7",
+      "temperature": 0.4,
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "edit": true,
+        "bash": true,
+        "task": true,
+        "question": true,
+        "todowrite": true,
+        "todoread": true
+      },
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "edit": "ask",
+        "task": "allow",
+        "question": "ask",
+        "bash": {
+          "*": "ask",
+          "ls *": "allow",
+          "grep *": "allow",
+          "glob *": "allow"
+        },
+        "todowrite": "allow",
+        "todoread": "allow"
+      },
+      "prompt": "{file:./agents/raiden-prompt.txt}"
+    },
+    "general-zero": {
+      "description": "Direct mission creation agent - create missions immediately after approval",
+      "mode": "primary",
+      "model": "minimax-coding-plan/MiniMax-M2.7",
+      "temperature": 0.2,
+      "tools": {
+        "read": true,
+        "mission_set_active": true,
+        "mission_write": true,
+        "mission_read": true,
+        "mission_list": true,
+        "mission_get_active": true,
+        "mission_health": true,
+        "mission_recover": true,
+        "write": false,
+        "edit": false,
+        "bash": false,
+        "task": true,
+        "question": true
+      },
+      "permission": {
+        "read": "allow",
+        "mission_set_active": "allow",
+        "mission_write": "allow",
+        "mission_read": "allow",
+        "mission_list": "allow",
+        "mission_get_active": "allow",
+        "mission_health": "allow",
+        "mission_recover": "allow",
+        "task": "allow",
+        "question": "ask",
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "{file:./agents/general-zero-prompt.txt}"
+    },
+    "big-boss": {
+      "description": "Mission execution agent - executes missions created by General Zero",
+      "mode": "primary",
+      "model": "minimax-coding-plan/MiniMax-M2.1",
+      "temperature": 0.2,
+      "tools": {
+        "write": true,
+        "read": true,
+        "edit": true,
+        "bash": true,
+        "mission_write": true,
+        "mission_read": true,
+        "mission_list": true,
+        "mission_get_active": true,
+        "mission_set_active": true,
+        "mission_health": true,
+        "mission_recover": true,
+        "task": false,
+        "question": true
+      },
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "read": "allow",
+        "mission_write": "allow",
+        "mission_read": "allow",
+        "mission_list": "allow",
+        "mission_get_active": "allow",
+        "mission_set_active": "allow",
+        "mission_health": "allow",
+        "mission_recover": "allow",
+        "question": "ask"
+      },
+      "prompt": "{file:./agents/big-boss-prompt.txt}"
+    },
+    "otacan": {
+      "description": "Intelligence gathering and reconnaissance subagent",
+      "mode": "subagent",
+      "model": "minimax-coding-plan/MiniMax-M2.1",
+      "temperature": 0.4,
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "context7_resolve-library-id": true,
+        "context7_query-docs": true,
+        "MiniMax_web_search": true,
+        "write": false,
+        "edit": false,
+        "todowrite": false,
+        "todoread": false,
+        "bash": false,
+        "task": false
+      },
+      "prompt": "{file:./agents/otacan-prompt.txt}"
+    },
+     "ocelot": {
+      "description": "Code review and quality assurance agent - validates completed work",
+      "mode": "subagent",
+      "model": "minimax-coding-plan/MiniMax-M2.7",
+      "temperature": 0.2,
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "write": true,
+        "bash": true,
+        "task": true,
+        "question": true,
+        "mission_write": true
+      },
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "write": "allow",
+        "bash": "ask",
+        "task": "allow",
+        "question": "ask",
+        "mission_write": "allow"
+      },
+      "prompt": "{file:./agents/ocelot-prompt.txt}"
+    },
     "eva": {
       "description": "Primary agent for codebase visualization that generates interactive HTML files with Mermaid diagrams. Users can open HTML files in any browser to explore their codebase visually with clickable nodes, zoom, and tooltips.",
       "mode": "primary",
-      "model": "zai-coding-plan/glm-5",
+      "model": "minimax-coding-plan/MiniMax-M2.7",
       "temperature": 0.4,
       "tools": {
         "read": true,
