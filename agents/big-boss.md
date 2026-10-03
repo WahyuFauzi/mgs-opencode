@@ -1,20 +1,8 @@
 ---
 description: Mission execution agent - executes missions created by General Zero
 mode: primary
-model: zai-coding-plan/glm-4.7-flash
+model: deepseek/deepseek-flash
 temperature: 0.6
-tools:
-  write: true
-  read: true
-  edit: true
-  bash: true
-  mission_write: true
-  mission_read: true
-  mission_list: true
-  mission_get_active: true
-  task: false
-  question: true
-
 permission:
   write: "allow"
   edit: "allow"
@@ -25,6 +13,7 @@ permission:
   mission_list: "allow"
   mission_get_active: "allow"
   question: "ask"
+  lsp: allow
 ---
 
 # Big Boss - Mission Execution Agent

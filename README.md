@@ -15,6 +15,24 @@ This repository contains OpenCode AI agent configurations, mission planning syst
 
 **Note**: All mission tracking uses folder-based system (`.mission/` directory). Mission Manager MCP service is deprecated.
 
+## Required Environment Variables
+
+Secrets are no longer stored in `opencode.jsonc` — they are resolved from environment variables at startup via `{env:VAR}` interpolation. Export these in your shell profile (e.g. `~/.zshrc`):
+
+```bash
+# Context7 MCP server API key (used by otacan for documentation lookups)
+export CONTEXT7_API_KEY="<your-context7-key>"
+
+# Brave Search API key (used by otacan for web intelligence)
+export BRAVE_API_KEY="<your-brave-key>"
+```
+
+> **Security note**: Earlier versions of this repository committed these keys in plaintext. **Rotate both keys now** (in the Context7 and Brave dashboards) and export the new values only in your local shell profile — never commit them. The config only requires the variable *names*; OpenCode resolves them at startup via `{env:VAR}` interpolation.
+
+## Tool Removals
+
+- **`tools/vision.ts`** — removed during the MISSION-001 cleanup (2026-08-16). It embedded a hardcoded Gemini API key, which is a security hazard. If image-analysis capability is needed again, restore it as an env-var-based implementation using `{env:GEMINI_API_KEY}`.
+
 ## Agents
 
 The agents in this repository are named after characters from the **Metal Gear Solid** series, drawing inspiration from the Patriots AI system. Each name represents a distinct operational capability:

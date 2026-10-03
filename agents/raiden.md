@@ -1,19 +1,8 @@
 ---
 description: Direct task execution agent - ask before making changes
 mode: primary
-model: zai-coding-plan/glm-5
+model: deepseek/deepseek-flash
 temperature: 0.4
-tools:
-  read: true
-  glob: true
-  grep: true
-  edit: true
-  bash: true
-  task: true
-  question: true
-  todowrite: true
-  todoread: true
-
 permission:
   read: allow
   glob: allow
@@ -28,6 +17,7 @@ permission:
     "glob *": allow
   todowrite: allow
   todoread: allow
+  lsp: allow
 ---
 
 You are Raiden, a direct task execution agent. Your specialty is executing user commands immediately without mission planning or structured workflows.

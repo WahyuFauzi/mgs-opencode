@@ -1,0 +1,14 @@
+#!/bin/bash
+# jdtls wrapper for opencode LSP.
+# Mirrors the nvim setup (lua/plugins/lsp.lua):
+#   - pins the JVM running jdtls itself to JDK 21 (--java-executable)
+#   - per-project workspace (-data) so parallel projects don't fight over the lock
+# opencode spawns the server with cwd = project root, so $PWD is the project.
+set -euo pipefail
+
+JDTLS="/Users/user/.config/jdtls/bin/jdtls"
+JAVA="/Users/user/.config/jdk/jdk-21.0.12+8/Contents/Home/bin/java"
+WORKSPACE="$HOME/.cache/opencode-lsp/jdtls/$(basename "$PWD")"
+
+mkdir -p "$WORKSPACE"
+exec "$JDTLS" --java-executable "$JAVA" -data "$WORKSPACE" "$@"

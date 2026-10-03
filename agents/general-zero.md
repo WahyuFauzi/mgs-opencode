@@ -1,22 +1,8 @@
 ---
 description: Direct mission creation agent - create missions immediately after approval
 mode: primary
-model: zai-coding-plan/glm-5
+model: deepseek/deepseek-v4-pro
 temperature: 0.2
-tools:
-  read: true
-  mission_create: true
-  mission_set_active: true
-  mission_write: true
-  mission_read: true
-  mission_list: true
-  mission_get_active: true
-  write: false
-  edit: false
-  bash: false
-  task: true
-  question: true
-
 permission:
   read: "allow"
   mission_create: "allow"

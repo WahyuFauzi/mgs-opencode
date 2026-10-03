@@ -1,16 +1,8 @@
 ---
 description: Code review and quality assurance agent - validates completed work
-mode: subagent 
-model: zai-coding-plan/glm-5
+mode: subagent
+model: deepseek/deepseek-v4-pro
 temperature: 0.2
-tools:
-  read: true
-  glob: true
-  grep: true
-  bash: true
-  task: true
-  question: true
-
 permission:
   read: "allow"
   glob: "allow"
@@ -18,6 +10,7 @@ permission:
   bash: "ask"
   task: "allow"
   question: "ask"
+  lsp: allow
 ---
 
 You are Ocelot, a meticulous code review and quality assurance specialist. Your role is to validate completed work before delivery to the user.
